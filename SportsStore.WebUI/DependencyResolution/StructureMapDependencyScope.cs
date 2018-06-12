@@ -22,9 +22,11 @@ using SportsStore.Domain.Entities;
 namespace SportsStore.WebUI.DependencyResolution {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Linq;
     using System.Web;
     using CommonServiceLocator;
+    using SportsStore.Domain.Concrete;
     //using Microsoft.Practices.ServiceLocation;
 
     using StructureMap;
@@ -46,22 +48,27 @@ namespace SportsStore.WebUI.DependencyResolution {
                 throw new ArgumentNullException("container");
             }
             Container = container;
-            //AddBindings(container);
+            AddBindings(container);
         }
 
         #endregion
 
-        //private void AddBindings(IContainer container)
-        //{
-        //    Mock<IProductRepository> mock = new Mock<IProductRepository>();
-        //    mock.Setup(m => m.Products).Returns(new List<Product>
-        //    {
-        //        new Product { Name = "Football", Price = 25},
-        //        new Product { Name = "Surf Board", Price = 179},
-        //        new Product { Name = "Running shoes", Price = 95},
-        //    });
-        //    container.Inject<IProductRepository>(mock.Object);
-        //}
+        private void AddBindings(IContainer container)
+        {
+            EmailSettings emailSettings = new EmailSettings {
+                WriteAsFile = bool.Parse(ConfigurationManager
+                                             .AppSettings["Email.WriteAsFile"] ?? "false")
+            };
+            container.Inject<EmailSettings>(emailSettings);
+            //Mock<IProductRepository> mock = new Mock<IProductRepository>();
+            //mock.Setup(m => m.Products).Returns(new List<Product>
+            //{
+            //    new Product { Name = "Football", Price = 25},
+            //    new Product { Name = "Surf Board", Price = 179},
+            //    new Product { Name = "Running shoes", Price = 95},
+            //});
+            //container.Inject<IProductRepository>(mock.Object);
+        }
 
         #region Public Properties
 

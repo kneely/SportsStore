@@ -20,6 +20,7 @@ using SportsStore.Domain.Concrete;
 
 namespace SportsStore.WebUI.DependencyResolution {
     using StructureMap;
+    using System.Configuration;
     using StructureMap.Configuration.DSL;
     using StructureMap.Graph;
 	
@@ -34,6 +35,7 @@ namespace SportsStore.WebUI.DependencyResolution {
 					scan.With(new ControllerConvention());
                 });
             For<IProductRepository>().Use<EFProductRepository>();
+            For<IOrderProcessor>().Use<EmailOrderProcessor>();
             //For<IExample>().Use<Example>();
         }
 
